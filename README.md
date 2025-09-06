@@ -1,68 +1,43 @@
-# CodeIgniter 4 Application Starter
+### Ejecución del proyecto:
+- Ejecutar el script sql ubicado en **Database>recursos.sql**.
+- Abrir la ruta http://biblioteca.test' .
 
-## What is CodeIgniter?
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+# 📚 Sistema de Gestión de Biblioteca Digital
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Descripción
+Sistema web desarrollado en **CodeIgniter 4** para la gestión completa de recursos bibliográficos, con administración de libros físicos/digitales, categorías, editoriales y sistema de ubicación geográfica.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## 🚀 Características
+- ✅ Gestión completa de recursos bibliográficos
+- ✅ Sistema de categorías y subcategorías
+- ✅ Administración de editoriales
+- ✅ Control de ubicación geográfica (departamentos, provincias, distritos)
+- ✅ Soporte para libros físicos y digitales
+- ✅ Interface responsive con Bootstrap 5
+- ✅ Validaciones avanzadas y confirmaciones con SweetAlert2
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 🛠️ Tecnologías
+- **Backend:** CodeIgniter 4, PHP, MySQL
+- **Frontend:** Bootstrap 5, SweetAlert2, Font Awesome
+- **JavaScript:** AJAX, Validaciones personalizadas
 
-## Installation & updates
+## 📝 Requisitos del sistema
+- PHP >= 7.4
+- MySQL >= 5.7
+- Servidor local (XAMPP, Laragon, WAMP o similar)
+- Composer instalado para la gestión de dependencias de CodeIgniter
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## ⚡ Instalación y ejecución
+1. Clonar o descargar el repositorio en tu entorno local.
+2. Ejecutar el script SQL ubicado en **Database/recursos.sql** para crear la base de datos y sus tablas.
+3. Configurar la conexión a la base de datos en `app/Config/Database.php`.
+4. Abrir el proyecto en el navegador: [http://biblioteca.test](http://biblioteca.test)
+5. Acceder a las secciones de **Recursos, Categorías, Subcategorías y Editoriales** para empezar a gestionar la biblioteca.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+## 🔒 Validaciones y seguridad
+- Validación obligatoria de campos en formularios antes de enviar datos.
+- Integridad referencial en la base de datos (categorías, subcategorías, editoriales).
+- Confirmaciones de registro, actualización y eliminación mediante alertas interactivas.
+- Manejo de errores con feedback claro al usuario.
 
-## Setup
-
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
-
-## Important Change with index.php
-
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.1 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library

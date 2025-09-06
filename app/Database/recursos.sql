@@ -1,35 +1,116 @@
+CREATE DATABASE biblioteca;
 USE biblioteca;
 
- CREATE TABLE departamentos(
-        iddepartamento              INT AUTO_INCREMENT                      PRIMARY KEY,
-        departamento                VARCHAR(40)                             NOT NULL,
-
+	CREATE TABLE libros(
+		id 			INT AUTO_INCREMENT PRIMARY KEY,
+		nombre 		VARCHAR(200) 	NOT NULL,
+		imagen		VARCHAR(200)	NOT NULL
+	)ENGINE = INNODB;
+ 
+   CREATE TABLE departamentos(
+        iddepartamento              INT AUTO_INCREMENT PRIMARY KEY,
+        departamento                VARCHAR(40) NOT NULL,
         CONSTRAINT uk_departamento_depa UNIQUE (departamento)
-
     )ENGINE = INNODB;
 
 
     CREATE TABLE provincias(
-        idprovincia                 INT AUTO_INCREMENT                      PRIMARY KEY,
-        provincia                   VARCHAR(40)                             NOT NULL,
-        iddepartamento              INT                                     NOT NULL,
-
-
+        idprovincia                 INT AUTO_INCREMENT PRIMARY KEY,
+        provincia                   VARCHAR(40) NOT NULL,
+        iddepartamento              INT NOT NULL,
         CONSTRAINT fk_iddepartemento_prov FOREIGN KEY (iddepartamento) REFERENCES departamentos(iddepartamento),
         CONSTRAINT uk_provincia_prov UNIQUE (provincia)
-
     )ENGINE = INNODB;
 
 
     CREATE TABLE distritos(
-        iddistrito                 	INT AUTO_INCREMENT                      PRIMARY KEY,
-        distrito                    VARCHAR(40)                             NOT NULL,
-        idprovincia                 INT                                     NOT NULL,
-
+        iddistrito                 	INT AUTO_INCREMENT PRIMARY KEY,
+        distrito                    VARCHAR(40) NOT NULL,
+        idprovincia                 INT NOT NULL,
         CONSTRAINT fk_idprovincia_dist FOREIGN KEY (idprovincia) REFERENCES provincias(idprovincia),
         CONSTRAINT uk_distrito_provincia UNIQUE (distrito, idprovincia)
-
     )ENGINE = INNODB;
+    
+    CREATE TABLE personas
+   (
+		idpersona		INT AUTO_INCREMENT PRIMARY KEY,
+		dni 				CHAR (8) NOT NULL,
+		apellidos		VARCHAR (40) NOT NULL,
+		nombres			VARCHAR (40) NOT NULL,
+		telefono			CHAR (9) NULL,
+		iddistrito		INT NOT NULL,
+		direccion 		VARCHAR (100) NULL,
+		CONSTRAINT uk_dni UNIQUE (DNI),
+		CONSTRAINT fk_iddistrito FOREIGN KEY (iddistrito) REFERENCES distritos(iddistrito)
+   )ENGINE = INNODB;
+	
+	CREATE TABLE categorias(
+		idcategoria	INT AUTO_INCREMENT PRIMARY KEY,
+		categoria 	VARCHAR(200) 	NOT NULL
+	)ENGINE = INNODB; 
+	
+	CREATE TABLE subcategorias(
+      idsubcategoria              INT AUTO_INCREMENT PRIMARY KEY,
+      subcategoria                VARCHAR(200) NOT NULL,
+      idcategoria                 INT NOT NULL,
+      CONSTRAINT fk_idcategoria FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria)
+    )ENGINE = INNODB;
+
+    CREATE TABLE editoriales (
+	   ideditorial INT AUTO_INCREMENT PRIMARY KEY,
+	   empresa VARCHAR(200) NOT NULL,
+	   nacionalidad VARCHAR(100) NOT NULL
+   ) ENGINE=INNODB;
+   
+   CREATE TABLE recursos (
+	   idrecurso INT AUTO_INCREMENT PRIMARY KEY,
+	   idsubcategoria INT NOT NULL,
+	   ideditorial INT NOT NULL,
+	   tipo ENUM('FISICO', 'DIGITAL') NOT NULL,
+	   titulo VARCHAR(255) NOT NULL,
+	   apublicacion YEAR NOT NULL,
+	   isbn VARCHAR(20) NOT NULL,
+	   numpaginas INT NOT NULL,
+	   rutaportada VARCHAR(255),
+	   rutarecurso VARCHAR(255),
+	   estado ENUM('BUENO', 'REGULAR', 'MALO') NOT NULL,
+	   creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	   modificado TIMESTAMP NULL DEFAULT NULL, 
+    CONSTRAINT fk_subcategoria FOREIGN KEY (idsubcategoria) REFERENCES subcategorias(idsubcategoria),
+    CONSTRAINT fk_editorial FOREIGN KEY (ideditorial) REFERENCES editoriales(ideditorial),
+    CONSTRAINT uq_isbn UNIQUE (isbn)
+) ENGINE=INNODB;
+
+   
+-- Editoriales  
+INSERT INTO editoriales (empresa, nacionalidad) VALUES
+('Santillana', 'España'),
+('Pearson Education', 'Reino Unido'),
+('McGraw-Hill', 'Estados Unidos'),
+('Planeta', 'España'),
+('Oxford University Press', 'Reino Unido'),
+('Cambridge University Press', 'Reino Unido'),
+('Siglo XXI Editores', 'México'),
+('Alianza Editorial', 'España'),
+('Random House', 'Estados Unidos'),
+('Norma Editorial', 'Colombia');
+    
+-- Categorias y subcategorias    
+INSERT INTO categorias (categoria) VALUES
+('Matemáticas'),
+('Comunicación'),
+('Computación');
+
+INSERT INTO subcategorias (subcategoria, idcategoria) VALUES
+('Razonamiento Lógico Matemático', 1),
+('Álgebra', 1),
+('Trigonometría', 1),
+('Razonamiento verbal', 2),
+('Composición', 2),
+('Redacción', 2),
+('Base de datos', 3),
+('Sistemas operativos', 3),
+('Lenguajes de programación', 3);
 
 -- DEPARTAMENTOS
 INSERT INTO departamentos (departamento) VALUES
@@ -2183,3 +2264,37 @@ INSERT INTO provincias (provincia, iddepartamento) VALUES
 ('Alexander Von Humboldt', 195),
 ('Purus', 196);
 
+INSERT INTO libros (nombre, imagen) VALUES
+('Conociendo el Perú', 'libro1.jpg'),
+('Matemáticas avanzadas', 'libro2.jpg');
+
+INSERT INTO personas (dni,apellidos,nombres, telefono,iddistrito) VALUES 
+('72500441', 'Pachas Saavedra', 'Omar','942787737','1026'),
+('41414141', 'De la Cruz Fernandez', 'Gladys','975213245','1006');
+
+INSERT INTO recursos (idsubcategoria, ideditorial, tipo, titulo, apublicacion, isbn, numpaginas, rutaportada, rutarecurso, estado) VALUES
+(3, 9, 'FISICO', 'Introducción a la Programación', 2023, '978-987-654-321-0', 320, 'uploads/portadas/introduccionia.png', NULL, 'BUENO'),
+(3, 9, 'FISICO', 'Java para novatos', 2023, '979-023-478-321-0', 350, 'uploads/portadas/javab.png', NULL, 'BUENO');
+
+CREATE VIEW vw_recursos AS
+SELECT 
+    r.idrecurso,
+    c.categoria,
+    s.subcategoria,
+    e.empresa AS editorial,
+    r.tipo,
+    r.titulo,
+    r.apublicacion,
+    r.isbn,
+    r.numpaginas,
+    r.rutaportada,
+    r.rutarecurso,
+    r.estado,
+    r.creado,
+    r.modificado
+FROM recursos r
+INNER JOIN subcategorias s ON r.idsubcategoria = s.idsubcategoria
+INNER JOIN categorias c ON s.idcategoria = c.idcategoria
+INNER JOIN editoriales e ON r.ideditorial = e.ideditorial;
+
+SELECT * FROM vw_recursos;
