@@ -3,25 +3,25 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class Recurso extends Model{
-
-    protected $table      = 'vw_recursos';   
-    protected $primaryKey = 'idrecurso';     
-
+class Recurso extends Model
+{
+    protected $table      = 'recursos'; 
+    protected $primaryKey = 'idrecurso';
+    
     protected $allowedFields = [
-        'idrecurso',
-        'categoria',
-        'subcategoria',
-        'editorial',
-        'tipo',
-        'titulo',
-        'apublicacion',
-        'isbn',
-        'numpaginas',
-        'rutaportada',
-        'rutarecurso',
-        'estado',
-        'creado',
-        'modificado'
+        'idsubcategoria',   
+        'ideditorial',     
+        'tipo', 
+        'titulo', 
+        'apublicacion', 
+        'isbn', 
+        'numpaginas', 
+        'rutaportada', 
+        'rutarecurso', 
+        'estado'
     ];
+    
+    protected $useTimestamps = true;
+    protected $createdField  = 'creado';
+    protected $updatedField  = 'modificado';
 }
