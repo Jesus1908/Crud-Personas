@@ -20,13 +20,13 @@
           <a class="nav-link active" aria-current="page" href="<?= base_url(); ?>">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?= base_url("libros"); ?>">Libros</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('editoriales'); ?>">Editoriales</a>
+          <a class="nav-link" href="<?= base_url('recursos'); ?>">Recursos</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('personas'); ?>">Personas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url("libros"); ?>">Libros</a>
         </li>
       </ul>
     </div>
