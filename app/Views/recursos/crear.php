@@ -39,8 +39,8 @@
           </div>
           <div class="col-md-4 mb-2">
             <label for="idsubcategoria">Subcategoría</label>
-            <select name="idsubcategoria" id="idsubcategoria" class="form-select" required disabled>
-              <option value="">Primero seleccione una categoría</option>
+            <select name="idsubcategoria" id="idsubcategoria" class="form-select" required>
+              <option value="">Seleccione una subcategoría</option>
             </select>
           </div>
           <div class="col-md-4 mb-2">
@@ -54,7 +54,6 @@
           </div>
         </div>
 
-      
         <div class="row g-2">
           <div class="col-md-4 mb-2">
             <label for="apublicacion">Año de publicación</label>
@@ -74,7 +73,6 @@
           </div>
         </div>
 
-    
         <div class="row g-2">
           <div class="col-md-6 mb-2">
             <label for="rutaportada">Portada</label>
@@ -111,15 +109,17 @@
 document.addEventListener("DOMContentLoaded", function() {
   const categoriaSelect = document.getElementById("idcategoria");
   const subcategoriaSelect = document.getElementById("idsubcategoria");
-  const formulario = document.getElementById("formRecurso");
 
+  // Cargar subcategorías cuando cambia la categoría
   categoriaSelect.addEventListener('change', function() {
     const idcategoria = this.value;
     
     subcategoriaSelect.innerHTML = '<option value="">Cargando subcategorías...</option>';
-    subcategoriaSelect.disabled = true;
     
-    if (!idcategoria) return;
+    if (!idcategoria) {
+      subcategoriaSelect.innerHTML = '<option value="">Seleccione una categoría primero</option>';
+      return;
+    }
 
     fetch(`<?= base_url('recursos/getSubcategoriasByCategoria/') ?>${idcategoria}`)
       .then(response => response.json())
@@ -130,48 +130,23 @@ document.addEventListener("DOMContentLoaded", function() {
           data.forEach(subcategoria => {
             subcategoriaSelect.innerHTML += `<option value="${subcategoria.idsubcategoria}">${subcategoria.subcategoria}</option>`;
           });
-          subcategoriaSelect.disabled = false; 
         } else {
-          subcategoriaSelect.innerHTML = '<option value="">No hay subcategorías</option>';
-          subcategoriaSelect.disabled = true;
+          subcategoriaSelect.innerHTML = '<option value="">No hay subcategorías para esta categoría</option>';
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        subcategoriaSelect.innerHTML = '<option value="">Error al cargar</option>';
-        subcategoriaSelect.disabled = true;
+        subcategoriaSelect.innerHTML = '<option value="">Error al cargar subcategorías</option>';
       });
   });
 
-  formulario.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    subcategoriaSelect.disabled = false;
-    
-    if (!subcategoriaSelect.value || subcategoriaSelect.value === "") {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Por favor seleccione una subcategoría válida'
-      });
-      subcategoriaSelect.disabled = true;
-      return false;
-    }
-
-    Swal.fire({
-      title: '¿Confirmar registro?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, guardar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        formulario.submit();
-      }
-    });
-  });
+  // Cargar subcategorías al iniciar si ya hay una categoría seleccionada
+  if (categoriaSelect.value) {
+    categoriaSelect.dispatchEvent(new Event('change'));
+  }
 });
 </script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?= $footer; ?>
