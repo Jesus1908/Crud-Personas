@@ -39,3 +39,5 @@ $routes->get('api/ubigeo/distritos/(:num)', 'DistritoController::getDistritosByP
 //Ruta: Recursos
 $routes->get('/recursos', 'RecursoController::index');//Listar
 $routes->get('/recursos/crear', 'RecursoController::crear');//Crear
+$routes->post('recursos/guardar', 'RecursoController::guardar');
+$routes->get('recursos/getSubcategoriasByCategoria/(:num)', 'RecursoController::getSubcategoriasByCategoria/$1');
