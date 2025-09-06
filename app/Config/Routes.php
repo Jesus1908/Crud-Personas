@@ -19,9 +19,7 @@ $routes->post('/libros/actualizar', 'LibroController::actualizar'); //<form meth
 
 $routes->get('/libros/borrar/(:num)', 'LibroController::borrar/$1');
 
-$routes->get('/editoriales', 'EditorialController::index');
-$routes->get('/editoriales/crear', 'EditorialController::crear');
-$routes->get('/editoriales/editar', 'EditorialController::editar');
+
 
 
 //Ruta: Personas
@@ -37,3 +35,7 @@ $routes->get('/personas/buscar', 'PersonaController::buscar');
 $routes->get('api/personas/buscardni/(:num)', 'PersonaController::searchByDNI/$1');
 $routes->get('api/ubigeo/provincias/(:num)', 'ProvinciaController::getProvinciasByDepartamento/$1');
 $routes->get('api/ubigeo/distritos/(:num)', 'DistritoController::getDistritosByProvincia/$1');
+
+//Ruta: Recursos
+$routes->get('/recursos', 'RecursoController::index');//Listar
+$routes->get('/recursos/crear', 'RecursoController::crear');//Crear
